@@ -14,7 +14,8 @@ const cookieOPts = {
 async function register(req, res) {
     try {
         const { username, psw, email } = req.body
-        //console.log(username, psw, email);
+        console.log(username, psw, email);
+
 
         if (!email || !username || !psw ) {
 
