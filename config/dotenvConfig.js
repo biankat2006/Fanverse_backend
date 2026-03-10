@@ -1,6 +1,7 @@
 const dotenv = require('dotenv')
 
 dotenv.config()
+//asd
 
 const config = {
     HOST: process.env.HOST,
