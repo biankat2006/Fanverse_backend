@@ -1,5 +1,7 @@
 const mysql = require('mysql2/promise')
 const { config } = require('../config/dotenvConfig')
+//komment 
+//dfasds
 
 const db = mysql.createPool({
     host: config.DB_HOST,
