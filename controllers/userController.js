@@ -68,11 +68,11 @@ async function login(req, res) {
         }
 
         const token = jwt.sign(
-            {user_id: userSQL.user_id, email: userSQL.email, username: userSQL.username},
+            {user_id: userSQL.user_id, email: userSQL.email, username: userSQL.username, role: userSQL.role},
             config.JWT_SECRET,
             {expiresIn: config.JWT_EXPIRES_IN}
         )
-        //console.log(token);
+        console.log(token);
 
         res.cookie(config.COOKIE_NAME, token, cookieOPts)
         return res.status(200).json({message: 'Sikeres bejelentkezés'})
@@ -89,9 +89,9 @@ async function login(req, res) {
 
 
 async function whoAmI(req,res){
-    const {user_id, username, email} = req.user
+    const {user_id, username, email, role} = req.user
     try {
-        return res.status(200).json({user_id: user_id, username: username, email:email})
+        return res.status(200).json({user_id: user_id, username: username, email:email , role:role})
     } catch (err) {
         //console.log(err);
         return res.status(500).json({error: 'whoAmI server oldali hiba'})
