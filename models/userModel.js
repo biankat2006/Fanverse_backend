@@ -9,7 +9,7 @@ async function findByEmail(email) {
 }
 
 async function createUser(email, username, hash) {
-    const sql = 'INSERT INTO `users` (`user_id`, `email`, `username`, `psw`, `pfp`) VALUES (NULL, ?, ?, ?, "nincs")'
+    const sql = 'INSERT INTO `users` (`user_id`, `email`, `username`, `psw`, `pfp`, role ) VALUES (NULL, ?, ?, ?, "nincs", "user")'
     //console.log(sql);
     const [result] = await db.query(sql, [email,username,hash])
     //console.log(result);
