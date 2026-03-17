@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { config } = require('../config/dotenvConfig')
-const { findByEmail, createUser } = require('../models/userModel')
+const { findByEmail, createUser, posteditUsername, insertpfp } = require('../models/userModel')
 
 const cookieOPts = {
     httpOnly: true,
@@ -102,4 +102,47 @@ async function logout(req,res){
     return res.clearCookie(config.COOKIE_NAME, {path: '/'}).status(200).json({message:'Sikeres kilépés'})
 }
 
-module.exports = { register, login, whoAmI, logout }
+
+
+
+async function editUsername(req , res) {
+    const user_id = req.user.user_id
+    const { username } = req.body
+    console.log(user_id, username);
+    try {
+        if(!username){
+            return res.status(400).json({ error: 'Add meg az usernamet  ' })
+            
+        }
+        const result = await posteditUsername(user_id,username)
+        return res.status(200).json({message:"sikeres feltöltés"})
+    } catch (err) {
+        return res.status(500).json({error:'szerver oldali hiba'})
+    }
+    
+}
+
+async function uploadpfp(req, res) {
+  try {
+    const {user_id} = req.user
+    
+    if(!req.file){
+        return res.status(400).json({error:'Nincs feltöltött file'})
+    }
+    const pfp = `user_pfp/${user_id}/${req.file.filename}`
+
+    const result = await insertpfp(user_id ,pfp)
+    
+    
+    return res.status(201).json({message:'sikeres feltöltés', pfp:pfp})
+
+   
+  } catch (err) {
+    return res.status(500).json({error:'pfp feltöltés hiba'})
+  }
+}
+
+
+
+
+module.exports = { register, login, whoAmI, logout, editUsername , uploadpfp }
