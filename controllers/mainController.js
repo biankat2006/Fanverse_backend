@@ -25,10 +25,9 @@ async function search(req, res) {
 async function everything(req, res){
     try {
         const everygame = await allgames()
-
         return res.status(200).json(everygame)
     } catch (err) {
-        return res.status(500).json({error:'szerver oldali hiba'})
+        return res.status(500).json({error:'szerver oldali hiba', err})
     }
 }
 
