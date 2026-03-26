@@ -32,4 +32,16 @@ async function insertpfp(user_id , pfp) {
 }
 
 
-module.exports = { findByEmail, createUser, posteditUsername ,insertpfp }
+async function getAllUser(){
+    const sql = "SELECT * FROM users"
+    const [result] = await db.query(sql)
+    return result
+}
+
+async function getAllGames() {
+    const sql = "SELECT g.game_id, g.title, g.description, g.banner_pic, c.creator_name, GROUP_CONCAT(gi.image SEPARATOR ',') AS images FROM games g INNER JOIN creators c ON g.creator_id = c.creator_id LEFT JOIN game_images gi ON g.game_id = gi.game_id GROUP BY g.game_id, g.title, g.description, g.banner_pic, c.creator_name;"
+    const [result] = await db.query(sql)
+    return result
+}
+
+module.exports = { findByEmail, createUser, posteditUsername ,insertpfp, getAllUser , getAllGames}

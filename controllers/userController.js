@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { config } = require('../config/dotenvConfig')
-const { findByEmail, createUser, posteditUsername, insertpfp } = require('../models/userModel')
+const { findByEmail, createUser, posteditUsername, insertpfp, getAllUser, getAllGames } = require('../models/userModel')
 
 const cookieOPts = {
     httpOnly: true,
@@ -142,7 +142,24 @@ async function uploadpfp(req, res) {
   }
 }
 
+async function alluser(req, res){
+    try {
+        const result = await getAllUser()
+        return res.status(200).json(result)
+    } catch (err) {
+        return res.status(500).json({error:'adatbázis hiba'})
+    }
+}
 
 
+async function allgames(req , res) {
+    try {
+        const result = await getAllGames()
+        return res.status(201).json(result)
+    } catch (err) {
+        return res.status(500).json({error:'adatbázis hiba'})
+    }
+}
 
-module.exports = { register, login, whoAmI, logout, editUsername , uploadpfp }
+
+module.exports = { register, login, whoAmI, logout, editUsername , uploadpfp, alluser , allgames  }
