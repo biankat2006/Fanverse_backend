@@ -1,5 +1,5 @@
 const {config} = require('../config/dotenvConfig')
-const { findbytitle, allgames } = require('../models/mainModel')
+const { findbytitle, allgames ,getOneGame} = require('../models/mainModel')
 
 async function search(req, res) {
     try {
@@ -31,4 +31,20 @@ async function everything(req, res){
     }
 }
 
-module.exports= {search , everything}
+
+async function oneGame(req , res) {
+    try {
+        const {game_id} = req.params
+        if (!game_id) {
+            return res.status(400).json({error:"Töltd ki a keresés mezőt!"})
+        }
+        const OneGame = await getOneGame(game_id)
+        return res.status(200).json(OneGame) 
+    } catch (err) {
+        return res.status(500).json({error:'szerver oldali hiba'})
+    }
+}
+
+
+
+module.exports= {search , everything , oneGame}
