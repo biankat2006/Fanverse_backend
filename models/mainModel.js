@@ -21,7 +21,7 @@ async function findbytitle(title) {
 
 
 async function allgames() {
-    const sql = "SELECT title , description , banner_pic , creators.creator_pfp , creators.creator_name FROM games INNER JOIN creators ON games.creator_id = creators.creator_id ORDER BY RAND() "
+    const sql = "SELECT game_id ,title , description , banner_pic , creators.creator_pfp , creators.creator_name FROM games INNER JOIN creators ON games.creator_id = creators.creator_id ORDER BY RAND() "
     const [result] = await db.query(sql)
     return result
 }
@@ -43,7 +43,7 @@ async function getOneGame(game_id) {
 
     const [rows] = await db.query(sql, [game_id]);
 
-    if (rows.length === 0) return null;
+    if (rows.length === 0) return {error:'game not found '};
 
     const game = {
         game_id: rows[0].game_id,
