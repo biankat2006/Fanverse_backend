@@ -44,4 +44,47 @@ async function getAllGames() {
     return result
 }
 
-module.exports = { findByEmail, createUser, posteditUsername ,insertpfp, getAllUser , getAllGames}
+async function userEdit(user_id,  username , email ,role){
+    const sql = 'UPDATE users SET email = ?, username = ?, role = ? WHERE user_id = ?'
+    const [result] = await db.query(sql, [email,username,  role, user_id])
+    return result
+}
+
+async function userDelete(user_id) {
+    const sql = `DELETE FROM users WHERE user_id =? `
+    const [result] = await db.query(sql , [user_id])
+    return result
+}
+
+async function gameEdit(title, description,game_id ,creator_name) {
+    const sql = `UPDATE games
+JOIN creators ON games.creator_id = creators.creator_id
+SET 
+    games.title = ?,
+    games.description = ?,
+    creators.creator_name = ?
+WHERE games.game_id = ?;`
+    const [result] = await db.query(sql, [title, description,creator_name ,game_id ])
+    return result
+}
+
+async function gameDelete(game_id) {
+    // 1. Először töröljük az összes olyan rekordot a többi táblából, 
+    // ami erre a game_id-ra hivatkozik.
+    // A sorrend mindegy, amíg a fő 'games' táblát hagyjuk utoljára.
+    
+    await db.query(`DELETE FROM game_images WHERE game_id = ?`, [game_id]);
+    await db.query(`DELETE FROM comments WHERE game_id = ?`, [game_id]);
+    await db.query(`DELETE FROM likes WHERE game_id = ?`, [game_id]);
+    await db.query(`DELETE FROM favourite WHERE game_id = ?`, [game_id]);
+    await db.query(`DELETE FROM bigpicture WHERE game_id = ?`, [game_id]);
+
+    // 2. Most, hogy már egyetlen tábla sem hivatkozik a játékra, 
+    // biztonságosan törölhetjük a fő táblából.
+    const sql = `DELETE FROM games WHERE game_id = ?`;
+    const [result] = await db.query(sql, [game_id]);
+
+    return result;
+}   
+
+module.exports = { findByEmail, createUser, posteditUsername ,insertpfp, getAllUser , getAllGames , userEdit, userDelete , gameEdit , gameDelete}
