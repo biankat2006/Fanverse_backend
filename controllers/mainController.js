@@ -1,5 +1,11 @@
 const {config} = require('../config/dotenvConfig')
-const { findbytitle, allgames ,getOneGame} = require('../models/mainModel')
+const {   findbytitle, 
+    allgames, 
+    getOneGame, 
+    findLike, 
+    countLikes,
+    addLike,
+    removeLike} = require('../models/mainModel')
 
 async function search(req, res) {
     try {
@@ -45,7 +51,64 @@ async function oneGame(req , res) {
     }
 }
 
+async function toggleLike(req, res) {
+    try {
+        const { game_id } = req.params
+
+        if (!req.user) {
+            return res.status(401).json({ error: "Nincs bejelentkezve" })
+        }
+
+        const user_id = req.user.user_id
+
+        if (!game_id || !user_id) {
+            return res.status(400).json({ error: "hiányzó adatok" })
+        }
+
+        const existing = await findLike(user_id, game_id)
+
+        if (existing.length > 0) {
+            await removeLike(user_id, game_id)
+            return res.status(200).json({ liked: false })
+        }
+
+        await addLike(user_id, game_id)
+        return res.status(200).json({ liked: true })
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ error: "szerver oldali hiba" })
+    }
+}
 
 
+async function getLikes(req, res) {
+    try {
+        const { game_id } = req.params
 
-module.exports= {search , everything , oneGame}
+        const result = await countLikes(game_id)
+
+        return res.status(200).json({ count: result })
+
+    } catch (err) {
+        return res.status(500).json({ error: "szerver oldali hiba" })
+    }
+}
+
+
+async function isLiked(req, res) {
+    try {
+        const game_id = req.params.game_id
+        const user_id = req.user.user_id
+
+        const result = await findLike(user_id, game_id)
+
+        return res.status(200).json({ liked: result.length > 0 })
+
+    } catch (err) {
+        return res.status(500).json({ error: "szerver oldali hiba", err })
+    }
+}
+
+
+module.exports= {search , everything , oneGame , toggleLike , getLikes , isLiked}

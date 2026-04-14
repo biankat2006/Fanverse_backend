@@ -77,4 +77,45 @@
 }
 
 
-    module.exports = { findbytitle, allgames, getOneGame }
+async function findLike(user_id, game_id) {
+    const sql = `
+        SELECT * FROM likes 
+        WHERE user_id = ? AND game_id = ?
+    `
+    const [result] = await db.query(sql, [user_id, game_id])
+    return result
+}
+
+// like hozzáadás
+async function addLike(user_id, game_id) {
+    const sql = `
+        INSERT INTO likes (user_id, game_id)
+        VALUES (?, ?)
+    `
+    const [result] = await db.query(sql, [user_id, game_id])
+    return result
+}
+
+// like törlés
+async function removeLike(user_id, game_id) {
+    const sql = `
+        DELETE FROM likes 
+        WHERE user_id = ? AND game_id = ?
+    `
+    const [result] = await db.query(sql, [user_id, game_id])
+    return result
+}
+
+// like szám
+async function countLikes(game_id) {
+    const sql = `
+        SELECT COUNT(*) as count 
+        FROM likes 
+        WHERE game_id = ?
+    `
+    const [result] = await db.query(sql, [game_id])
+    return result[0].count
+}
+
+
+    module.exports = { findbytitle, allgames, getOneGame,findLike ,addLike ,removeLike ,countLikes }
