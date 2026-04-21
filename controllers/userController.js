@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { config } = require('../config/dotenvConfig')
 const { findByEmail, createUser, posteditUsername, insertpfp, getAllUser, getAllGames, userEdit, userDelete, gameEdit, gameDelete } = require('../models/userModel')
