@@ -4,6 +4,7 @@
     async function findbytitle(title) {
         const sql =`
             SELECT 
+                games.game_id,
                 games.title, 
                 games.description, 
                 games.banner_pic, 
