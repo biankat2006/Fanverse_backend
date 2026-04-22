@@ -24,7 +24,7 @@ async function register(req, res) {
         }
         const isValid = await emailValidator(email)
         if (!isValid) {
-            return res.status(402).json({ message: "Az email formátuma nem megfelelő" })
+            return res.status(402).json({ error: "Az email formátuma nem megfelelő" })
         }
         const exist = await findByEmail(email)
         //console.log(exist);
@@ -60,7 +60,7 @@ async function login(req, res) {
 
         const isValid = await emailValidator(email)
         if (!isValid) {
-            return res.status(402).json({ message: "Az email formátuma nem megfelelő" })
+            return res.status(402).json({ error: "Az email formátuma nem megfelelő" })
         }
 
         const userSQL = await findByEmail(email)
