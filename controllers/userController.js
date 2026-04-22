@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { config } = require('../config/dotenvConfig')
+const emailValidator = require('node-email-verifier');
 const { findByEmail, createUser, posteditUsername, insertpfp, getAllUser, getAllGames, userEdit, userDelete, gameEdit, gameDelete } = require('../models/userModel')
 
 const cookieOPts = {
@@ -17,9 +18,13 @@ async function register(req, res) {
         console.log(username, psw, email);
 
 
-        if (!email || !username || !psw) {
+        if (!username || !psw) {
 
             return res.status(400).json({ error: 'Minden mezőt tölts ki' })
+        }
+        const isValid = await emailValidator(email)
+        if (!isValid) {
+            return res.status(402).json({ message: "Az email formátuma nem megfelelő" })
         }
         const exist = await findByEmail(email)
         //console.log(exist);
@@ -49,8 +54,13 @@ async function login(req, res) {
         const { email, psw } = req.body
         //console.log(email,psw);
 
-        if (!email || !psw) {
-            return res.status(400).json({ error: 'Add meg az emailt és a jelszót is' })
+        if (!psw) {
+            return res.status(400).json({ error: 'Add a jelszót!' })
+        }
+
+        const isValid = await emailValidator(email)
+        if (!isValid) {
+            return res.status(402).json({ message: "Az email formátuma nem megfelelő" })
         }
 
         const userSQL = await findByEmail(email)
@@ -68,7 +78,7 @@ async function login(req, res) {
         }
 
         const token = jwt.sign(
-            { user_id: userSQL.user_id, email: userSQL.email, username: userSQL.username, role: userSQL.role, pfp:userSQL.pfp },
+            { user_id: userSQL.user_id, email: userSQL.email, username: userSQL.username, role: userSQL.role, pfp: userSQL.pfp },
             config.JWT_SECRET,
             { expiresIn: config.JWT_EXPIRES_IN }
         )
@@ -135,13 +145,13 @@ async function uploadpfp(req, res) {
 
         // Mivel a statikus mappád a 'user_pfp', a relatív útvonal 
         // a mappán belül: ID/fájlnév
-        const dbPath = `${user_id}/${req.file.filename}`; 
+        const dbPath = `${user_id}/${req.file.filename}`;
 
         await insertpfp(user_id, dbPath);
 
-        return res.status(201).json({ 
-            message: 'Sikeres feltöltés', 
-            pfp: dbPath 
+        return res.status(201).json({
+            message: 'Sikeres feltöltés',
+            pfp: dbPath
         });
     } catch (err) {
         return res.status(500).json({ error: 'Hiba' });
