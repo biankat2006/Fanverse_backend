@@ -6,5 +6,5 @@ const HOST = config.HOST
 // teszt
 
 app.listen(PORT,()=>{
-    console.log(`Szerver IP: http://${HOST}:${PORT}`);
+    console.log(`Szerver IP: ${HOST}`);
 })
