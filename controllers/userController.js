@@ -198,21 +198,23 @@ async function editUser(req, res) {
         return res.status(500).json({ error: 'Adatbázis hiba történt!' });
     }
 }
-
 async function deleteUser(req, res) {
     try {
         const { user_id } = req.params
+
         const result = await userDelete(user_id)
+
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'ilyen felhasználó nem található' })
         }
 
-        return res.status(201).json({ message: 'sikeres törlés' })
+        return res.status(200).json({ message: 'sikeres törlés' })
+
     } catch (err) {
+        console.error(err)
         return res.status(500).json({ error: 'adatbázis hiba' })
     }
 }
-
 async function editGame(req, res) {
     try {
         const { game_id } = req.params
