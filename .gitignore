@@ -1,0 +1,10 @@
+/node_modules
+package-lock.json
+.env
+file
+kepek
+user_pfp
+updates
+bigpicture
+creator
+*.rar
