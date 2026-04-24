@@ -119,7 +119,16 @@ async function countLikes(game_id) {
 }
 
 async function mostLIKE() {
-    const sql = `SELECT games.game_id , games.title , games.description , games.banner_pic , games.creator_id , games.game_file , COUNT(likes.user_id) likenumber FROM 
+    const sql = `SELECT 
+    games.game_id , 
+    games.title , 
+    games.description , 
+    games.banner_pic , 
+    games.creator_id , 
+    games.game_file , 
+    users.username AS creator_name,
+    users.pfp AS creator_pfp,
+    COUNT(likes.user_id) likenumber FROM 
     games INNER JOIN likes ON games.game_id = likes.game_id GROUP BY game_id ORDER BY likenumber DESC`
     const [result] = await db.query(sql)
     return result
