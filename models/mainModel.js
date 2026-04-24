@@ -118,6 +118,12 @@ async function countLikes(game_id) {
     return result[0].count
 }
 
+async function mostLIKE() {
+    const sql = `SELECT games.game_id , games.title , games.description , games.banner_pic , games.creator_id , games.game_file , COUNT(likes.user_id) likenumber FROM 
+    games INNER JOIN likes ON games.game_id = likes.game_id GROUP BY game_id ORDER BY likenumber DESC`
+    const [result] = await db.query(sql)
+    return result
+}
 
 
-    module.exports = { findbytitle, allgames, getOneGame,findLike ,addLike ,removeLike ,countLikes }
+    module.exports = { findbytitle, allgames, getOneGame,findLike ,addLike ,removeLike ,countLikes,mostLIKE }

@@ -5,6 +5,7 @@ const {   findbytitle,
     findLike, 
     countLikes,
     addLike,
+    mostLIKE,
     removeLike} = require('../models/mainModel')
 
 async function search(req, res) {
@@ -111,4 +112,14 @@ async function isLiked(req, res) {
 }
 
 
-module.exports= {search , everything , oneGame , toggleLike , getLikes , isLiked}
+async function mostLiked(req, res) {
+    try {
+        const result = await mostLIKE()
+        return res.status(200).json(result)
+    } catch (err) {
+        return res.status(500).json({ error: "szerver oldali hiba", err })
+    }
+    
+}
+
+module.exports= {search , everything , oneGame , toggleLike , getLikes , isLiked ,mostLiked}
