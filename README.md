@@ -40,7 +40,7 @@
     - pfp
     - role
 
-![kép az adatbázis kapcsolatokról](https://kommodo.ai/i/SgjFhJPe2PmjH8SLzwEA)
+![kép az adatbázis kapcsolatokról](https://www.image2url.com/r2/default/images/1777285822353-63bbe052-1cf0-446d-8ec5-68c976eb1dc0.png)
 >[Az adatbázis diagramja](https://drawsql.app/teams/rtgh/diagrams/fanverse-central)
 
 ---
