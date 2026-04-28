@@ -110,3 +110,9 @@
 - [GitHub](https://github.com/)
 - [Gemini](https://gemini.google.com/app?hl=hu)
 - [PhpMyAdmin](https://www.phpmyadmin.net)
+
+## Postman tesztek
+- [Attila postmanje](https://documenter.getpostman.com/view/48108190/2sBXqJJzus)
+- [Bianka postmanje](https://documenter.getpostman.com/view/48108195/2sBXqJJzuv)
+
+>Két külön gépről csináltuk a projektet és mind a kettőnk tesztelt és ezért van két postman
